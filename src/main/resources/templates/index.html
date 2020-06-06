@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <title>employee management</title>
+        <style>
+            body {
+                padding: 0px 0px 0px 0px;
+            }
+            #submenu {
+                text-align: left;
+                border-right: 1px solid gray;
+            }
+            button {
+                margin-right: 5px;
+            }
+            nav {
+                margin-bottom: 10px;
+            }
+            h3 {
+                text-decoration: underline;
+            }
+            table {
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            .result__info {
+                font-size: 20px;
+                margin: 5px;
+            }
+            i#error__success__scopped {
+                margin-right: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container" id="app">
+            <!--Heading-->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#/">
+                    <i class="fa fa-home fa-fw" aria-hidden="true"></i>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/">log</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/department">department</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/employee">employee</router-link>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+            </nav>
+
+            <!--Page Content-->
+            <div class="page__content">
+                <router-view></router-view>
+            </div>
+            
+        </div>
+
+        <template id="template__dashboard">
+            <div id="dashboard">
+                <h3>Dashboard</h3>
+                
+                <!--scopped error -->
+                <div class="alert alert-danger" role="alert" v-if="error">
+                    <i id="error__success__scopped" class="fa fa-exclamation-triangle" aria-hidden="true"></i>{{error}}
+                </div>
+
+                <!--result-->
+                <div class="spinner__process" v-if="spinner">
+                    <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="row" v-else>
+                    <section class="col-10">
+                        <div class="activitylog" v-if="logs.length > 0">
+                            <p>Activity log for all the event around all the available module. Currently available module are Department and Employee !</p>
+                            <table class="table table-striped" >
+                                <tbody>
+                                    <tr v-for="(log,logIdx) in logs" :key="logIdx">
+                                        <td v-for="col in Object.keys(log)" v-show="col!='id'">{{ col=='date' ? new Date(log[col]).toLocaleString() :log[col] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="no__activitylog" v-else>
+                            <i class="fa fa-info fa-2x" aria-hidden="true"></i>
+                            No any activity log found!
+                        </div>
+                    </section>
+                    <section class="col-2">
+                        <table class="table">
+                            <tbody>
+                                <tr v-for="a in Object.keys(versionDetails)">
+                                    <td>{{a}}</td>
+                                    <td>{{ versionDetails[a] }}</td>
+                                </tr>
+                            </tbody>
+                        </table>  
+                    </section>
+                </div>
+            </div>
+        </template>
+
+        <template id="template__crud">
+            <div>
+                <h3>{{ title }}</h3>
+                
+                <!--scopped error -->
+                <div class="alert alert-danger" role="alert" v-if="error">
+                    <i id="error__success__scopped" class="fa fa-exclamation-triangle" aria-hidden="true"></i>{{error}}
+                </div>
+                <div class="alert alert-success" role="alert" v-if="success">
+                    <i id="error__success__scopped" class="fa fa-check" aria-hidden="true"></i> The entity successfully execuated!
+                </div>
+
+                <div class="row">
+                    <section class="col-3" id="submenu">
+                        <p>To create a new {{ title }}, fill the below form:</p>
+                        <div class="form-group" v-for="(formProperty,formIdx) in formProperties" :key="formIdx">
+                            <label :for="'label__'+formIdx">{{ formProperty.label }}</label>
+                            <input type="email" class="form-control" :id="'inputType__'+formIdx" :placeholder="formProperty.label" v-if="formProperty.inputType == 'input'" v-model="formInputData[formProperty.label]">
+                            <select class="form-control" id="exampleFormControlSelect1" v-else v-model="formInputData[formProperty.label]">
+                                <option disabled value="xxx">Please select one</option>
+                                <option v-for="o in dropdownData" :value="o" v-if="dropdownData.length > 0">{{ o.name }}</option>
+                            </select>
+                        </div>
+                        
+                        <button type="button" class="btn btn-outline-primary" @click="finalUpdate()" v-if="updateMode">Update</button>
+                        <button type="button" class="btn btn-outline-primary" @click="create()" v-else>Save</button>
+                        <button type="button" class="btn btn-outline-primary" @click="cancel()">Cancel</button>
+                    </section>
+
+                    <div class="spinner__process" v-if="spinner">
+                        <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <section class="col-9" id="menu-result" v-else>
+                        <table class="table table-hover" v-if="entity.length > 0">
+                            <thead>
+                                <tr>
+                                    <th v-for="(col,colIdx) in Object.keys(entity[0])" :key="colIdx" v-show="col!='id'">{{ col }}</th>
+                                    <th>action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="e,idx in entity" :key="idx" :id="e.id">
+                                    <td v-for="(col,colIdx) in Object.keys(e)" :key="colIdx" v-show="col!='id'">{{ e[col] !=null && typeof(e[col]) == "object" ? e[col].name : e[col] }}</td>
+                                    <td>
+                                        <button class="btn btn-info" @click="update(e)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                        <button class="btn btn-danger" @click="deleteE(e)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div v-else>
+                            <i class="fa fa-info fa-2x" aria-hidden="true"></i>
+                            <span class="result__info"> {{ title }} not found! Please, create one by following create form.</span>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            
+        </template>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" ></script>
+        <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            const mock = false
+
+            function closeAlert() {
+                setTimeout(function() {
+                    $(".alert").alert('close')
+                }, 8000)
+                
+            }
+
+            // Component
+            Vue.component('crud', {
+                name: 'crud',
+                template: '#template__crud',
+                props: {
+                    title: String,
+                    formProperties: Array,
+                    endpoint: String,
+                    dropdownData: Array
+                },
+                data() {
+                    return {
+                        entity: [],
+                        formInputData: {},
+                        error: null,
+                        processing: false,
+                        updateMode: false,
+                        success: false,
+                        spinner: false
+                    }
+                },
+                methods: {
+                    create() {
+
+                        mock ? this.entity.push(this.formInputData) : axios.post(this.endpoint,this.formInputData,{'Content-Type': 'application/json'})
+                            .then(response=> {
+                                this.success = true
+                                this.refresh();
+                            })
+                            .catch(error=> {
+                                this.error=error
+                                closeAlert()
+                            });
+                        this.formInputData = {}
+                        this.refresh()
+                    },
+                    cancel() {
+                        this.formInputData = {}
+                        this.updateMode=false,
+                        this.refresh()
+                    },
+                    read() {
+                        this.spinner=true
+                        mock ? this.entity : axios.get(this.endpoint)
+                            .then(response=> {
+                                this.spinner=false
+                                this.entity = response.data.content
+                                closeAlert()
+                            })
+                            .catch(error=> {
+                                this.spinner=false
+                                this.error = error
+                                closeAlert()
+                            })
+                    },
+                    update(v) {
+                        // update this with a modal                        
+                        this.formInputData = v
+                        this.updateMode=true
+                    },
+                    finalUpdate() {
+                        this.spinner=true
+                        mock ? this.entity.pop() : axios.put(this.endpoint+"/"+this.formInputData.id,this.formInputData,{'Content-Type': 'application/json'})
+                            .then(response=> {
+                                this.spinner=false
+                                this.success = true
+                                this.updateMode = false
+                                this.formInputData = {}
+                                this.refresh()
+                                closeAlert()
+                            })
+                            .catch(error=> {
+                                this.spinner=false
+                                this.error = error
+                                closeAlert()
+                            })
+                    },
+                    deleteE(v) {
+                        this.spinner=true
+                        mock ? this.entity.pop() : axios.delete(this.endpoint+"/"+v.id)
+                            .then(response=> {
+                                this.spinner=false
+                                this.success = true
+                                this.refresh()
+                                closeAlert()
+                            })
+                            .catch(error=> {
+                                this.spinner=false
+                                this.error = error
+                                closeAlert()
+                            })
+                    },
+                    refresh() {
+                        this.read()
+                    }
+                },
+                created() {
+                    this.refresh()
+                }
+            })
+
+            const Department = Vue.component('Department', {
+                template: '<crud :title=title :formProperties=formProperties :endpoint=endpoint></crud>',
+                data() {
+                    return {
+                        title : 'Department',
+                        endpoint: "/api/department",
+                        formProperties: [
+                            {
+                                "label": "name",
+                                "inputType" : "input",
+                                "defaultData" : []
+                            }
+                        ]
+                    }
+                }
+            })
+
+            const Employee = Vue.component('Employee', { 
+                template: '<crud :title=title :formProperties=formProperties :endpoint=endpoint :dropdownData=departments></crud>',
+                data() {
+                    return {
+                        title : 'Employee',
+                        endpoint: "/api/employee",
+                        departments : [],
+                        formProperties: [
+                            {
+                                "label": "name",
+                                "inputType" : "input"
+                            },
+                            {
+                                "label": "address",
+                                "inputType" : "input"
+                            },
+                            {
+                                "label": "department",
+                                "inputType" : "dropdown"
+                            }
+                        ]
+                    }
+                },
+                created() {
+                    mock ? this.departments : axios.get("/api/department")
+                        .then(response=> {
+                            this.departments = response.data.content
+                        })
+                        .catch(error=> {
+                            this.error = error
+                            closeAlert()
+                        })
+                }
+            })
+
+            const Dashboard = { 
+                name: 'Dashboard',
+                template: '#template__dashboard',
+                data() {
+                    return {
+                        logs: [],
+                        error: null,
+                        versionDetails: {},
+                        spinner: true
+                    }
+                },
+                methods : {
+                    auditlog() {
+                        mock ? this.logs : axios.get("/api/auditlog")
+                            .then(response=> {
+                                this.spinner = false
+                                this.logs = response.data.content
+                            })
+                            .catch(error=> {
+                                this.spinner = false
+                                this.error = error
+                                closeAlert() 
+                            })
+                    },
+                    fetchApiVersion() {
+                        mock ? this.versionDetails : axios.get("/api")
+                            .then(response=> {
+                                this.versionDetails = response.data
+                            })
+                            .catch(error=> {
+                                this.error = error
+                                closeAlert() 
+                            })
+                    }
+                },
+                created() {
+                    this.auditlog()
+                    this.fetchApiVersion()
+                }
+            }
+
+            //router
+            const router = new VueRouter({
+                routes : [
+                    { path: '/', component: Dashboard },
+                    { path: '/department', component: Department },
+                    { path: '/employee', component: Employee }
+                ]
+            })
+
+            //instanciate vue
+            const app = new Vue({
+                el: '#app',
+                router: router,
+                data: {
+                    
+                },
+                methods: {
+                    
+                }
+            })
+        </script>
+    </body>
+</html>
