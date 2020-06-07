@@ -1,0 +1,259 @@
+{
+	"info": {
+		"_postman_id": "1fc71d13-5162-4e37-9d60-c516f928bd94",
+		"name": "employee",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "application/api",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{empdevelopmenthost}}/api",
+					"host": [
+						"{{empdevelopmenthost}}"
+					],
+					"path": [
+						"api"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/employee_GetAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{empdevelopmenthost}}/api/employee",
+					"host": [
+						"{{empdevelopmenthost}}"
+					],
+					"path": [
+						"api",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/employee_POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\" : \"R MAJUMDAR\",\n\t\"address\" : \"DELHI\",\n\t\"department\" : {\n\t\t\"name\" : \"IT\"\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{empdevelopmenthost}}/api/employee",
+					"host": [
+						"{{empdevelopmenthost}}"
+					],
+					"path": [
+						"api",
+						"employee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/employee_PUT",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"K BASU\",\n\t\"address\": \"SAMBALPUR\",\n\t\"department\": {\n\t    \"id\": \"f876b3d0-c171-44b3-99f8-068041510ab7\",\n\t    \"name\": \"FINANCE\"\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{empdevelopmenthost}}/api/employee/f5e70485-419c-4328-a423-cb0cfaa6d45b",
+					"host": [
+						"{{empdevelopmenthost}}"
+					],
+					"path": [
+						"api",
+						"employee",
+						"f5e70485-419c-4328-a423-cb0cfaa6d45b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/employee_DELETE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{empdevelopmenthost}}/api/employee/f5e70485-419c-4328-a423-cb0cfaa6d45b",
+					"host": [
+						"{{empdevelopmenthost}}"
+					],
+					"path": [
+						"api",
+						"employee",
+						"f5e70485-419c-4328-a423-cb0cfaa6d45b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/employee_GetById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{empdevelopmenthost}}/api/employee/e8d2d686-43ba-4d5a-a74c-9197a9c21692",
+					"host": [
+						"{{empdevelopmenthost}}"
+					],
+					"path": [
+						"api",
+						"employee",
+						"e8d2d686-43ba-4d5a-a74c-9197a9c21692"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/department_GetAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{empdevelopmenthost}}/api/department",
+					"host": [
+						"{{empdevelopmenthost}}"
+					],
+					"path": [
+						"api",
+						"department"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/department_POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\" : \"MANAGEMENT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{empdevelopmenthost}}/api/department",
+					"host": [
+						"{{empdevelopmenthost}}"
+					],
+					"path": [
+						"api",
+						"department"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/department_PUT",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\" : \"CEO OFFICE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{empdevelopmenthost}}/api/department/894dbfa1-4b9a-41f0-86ef-625e3cfdadc5",
+					"host": [
+						"{{empdevelopmenthost}}"
+					],
+					"path": [
+						"api",
+						"department",
+						"894dbfa1-4b9a-41f0-86ef-625e3cfdadc5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/department_GetById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{empdevelopmenthost}}/api/department/ca986ca8-6326-469d-a2ca-d72f55b5b7e3",
+					"host": [
+						"{{empdevelopmenthost}}"
+					],
+					"path": [
+						"api",
+						"department",
+						"ca986ca8-6326-469d-a2ca-d72f55b5b7e3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/department_DELETE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{empdevelopmenthost}}/api/department/894dbfa1-4b9a-41f0-86ef-625e3cfdadc5",
+					"host": [
+						"{{empdevelopmenthost}}"
+					],
+					"path": [
+						"api",
+						"department",
+						"894dbfa1-4b9a-41f0-86ef-625e3cfdadc5"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
