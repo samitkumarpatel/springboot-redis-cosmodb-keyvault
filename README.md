@@ -1,3 +1,5 @@
+[Spring on Azure integration documentation ](https://docs.microsoft.com/en-us/azure/developer/java/spring-framework/) to know more.
+
 ### springboot-redis-cosmodb
 
 To be explore further
