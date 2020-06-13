@@ -1,0 +1,35 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Java 8 Installation
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Cache
+      uses: actions/cache@v2.0.0
+      with:
+        path: $(Pipeline.Workspace)/.m2/repository
+        key: 'maven | "$(Agent.OS)" | **/pom.xml'
+        restore-keys: |
+          maven | "$(Agent.OS)"
+          maven
+        
+    - name: Maven Build
+      run: ./mvnw -B -e package
