@@ -22,14 +22,6 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Cache
-      uses: actions/cache@v2.0.0
-      with:
-        path: $(Pipeline.Workspace)/.m2/repository
-        key: 'maven | "$(Agent.OS)" | **/pom.xml'
-        restore-keys: |
-          maven | "$(Agent.OS)"
-          maven
         
     - name: Maven Build
       run: ./mvnw -B -e package
