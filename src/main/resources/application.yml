@@ -1,0 +1,20 @@
+app:
+  slot: ${SLOT:UNKNOWN}
+
+spring:
+  thymeleaf:
+    enabled: true
+    cache: false
+  data:
+    mongodb:
+      uri=${MONGODB_URI:mongodb://localhost:27017}:
+      database: empdev
+      #username: root
+      #password: example
+azure:
+  keyvault:
+    enabled: false
+    uri: ${KEYVAULT_URI:http://localhost}
+    client-id: ${KEYVAULT_CLIENT_ID:0000-0000-0000-0000}
+    client-key: ${KEYVAULT_CLIENT_KEY:0000-0000-0000-0000}
+    tenant-id: ${KEYVAULT_TENANT_ID:0000-0000-0000-0000}

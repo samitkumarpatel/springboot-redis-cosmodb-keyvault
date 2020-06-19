@@ -1,0 +1,13 @@
+app:
+  slot: ${SLOT:UNKNOWN}
+
+spring:
+  thymeleaf:
+    enabled: true
+    cache: false
+  data:
+    mongodb:
+      uri=${MONGODB_URI:mongodb://localhost:27017}:
+      database: empdev
+      #username: root
+      #password: example

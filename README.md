@@ -11,3 +11,5 @@ To be explore further
 
 4. Deploy springboot application to azure app service ,[click](https://docs.microsoft.com/en-us/azure/developer/java/spring-framework/deploy-spring-boot-java-app-from-container-registry-using-maven-plugin) for more details.
 5. The UI is build with [vuejs](https://vuejs.org/v2/guide/installation.html), [bootstrap](https://getbootstrap.com/) and [font awesome](https://fontawesome.com/v4.7.0/) for icons and other.
+6. springboot with [azure key-vault](https://github.com/Microsoft/azure-spring-boot/tree/master/azure-spring-boot-starters/azure-keyvault-secrets-spring-boot-starter) example.
+7. springboot with [embaded mongodb](https://www.baeldung.com/spring-boot-embedded-mongodb) in test scope example.
